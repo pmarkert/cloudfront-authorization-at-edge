@@ -10,8 +10,8 @@ CONFIG.logger.debug("Configuration loaded:", CONFIG);
 export const handler: CloudFrontRequestHandler = async (event) => {
   CONFIG.logger.debug("Event:", event);
   const request = event.Records[0].cf.request;
-  if (request.uri.endsWith("/")) {
-    request.uri += "index.html";
+  if (!request.uri.match(/\.[^\/]+$/)) {
+    request.uri = request.uri.replace(/\/?$/, "/index.html");
   }
   CONFIG.logger.debug("Returning request:\n", request);
   return request;
